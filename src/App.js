@@ -3,6 +3,9 @@ import { useRoutes } from './routes'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { AppContext } from './context/AppContext'
 import { Header } from './components/header'
+import { initDataSorting } from './data/initDataSorting'
+import { initDataList } from './data/initDataList'
+import { initCurrentSorting } from './data/initCurrentSorting'
 import styled from 'styled-components'
 
 const AppBlock = styled.div`
@@ -13,32 +16,20 @@ const AppBlock = styled.div`
   margin: 0 auto;
 `
 
-const initSorting = [
-  {
-    type: 'type',
-    list: ['Рабочие', 'Личные', 'Неотложные']
-  },
-  {
-    type: 'time',
-    list: ['Текущие', 'Завершённые']
-  },
-  {
-    type: 'name',
-    list: []
-  }
-]
 
 export const App = () => {
   const routes = useRoutes()
-  const [sorting, setSorting] = useState(initSorting)
+  const [sorting, setSorting] = useState(initDataSorting)
+  const [currentSorting, setCurrentSorting] = useState(initCurrentSorting)
+  const [data, setData] = useState(initDataList)
 
-  const selectHandler = (value) => {
-    console.log('selectHandler', value)
+  const selectHandler = (value, type) => {
+    console.log('selectHandler', value, type)
   }
 
 
   return (
-    <AppContext.Provider value={{selectHandler, sorting}}>
+    <AppContext.Provider value={{selectHandler, sorting, currentSorting, data}}>
       <Router>
         <AppBlock>
           <Header />

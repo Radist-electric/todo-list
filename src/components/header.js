@@ -54,7 +54,6 @@ const StyledNavLink = styled(NavLink)`
 export const Header = () => {
   const curPath = useLocation().pathname
   const context = useContext(AppContext)
-  console.log(context.sorting);
 
   // Создаём JSX
   const linksList = links.map((item, i) => (

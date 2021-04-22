@@ -1,19 +1,27 @@
-import {useState, useContext} from 'react'
+import { useState, useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 import styled from 'styled-components'
 
-const CustomSelect = styled.select`
-  height: 30px;
-  width: 150px;
+const SelectBlock = styled.div`
   margin: 0 10px;
+`
+const SelectTitle = styled.p`
+  margin: 0 0 5px;
+  font-weight: 700;
+`
+const SelectCustom = styled.select`
+  height: 30px;
+  min-width: 150px;
   border: 1px solid #52575C;
   border-radius: 3px;
   outline: none;
 `
 
+
 export const Select = (props) => {
   const context = useContext(AppContext)
-  const [value, setValue] = useState('2')
+  const typeValue = context.currentSorting.find((item) => props.data.type === item.type)
+  const [value, setValue] = useState(typeValue.value)
 
   const handleChange = event => {
     setValue(event.target.value)
@@ -24,8 +32,12 @@ export const Select = (props) => {
   const options = props.data.list.map((value, i) => <option value={value} key={i}>{value}</option>)
 
   return (
-    <CustomSelect value={value} onChange={handleChange}>
-      {options}
-    </CustomSelect>
+    <SelectBlock>
+      <SelectTitle>{props.data.title}</SelectTitle>
+      <SelectCustom value={value} onChange={handleChange}>
+        <option value='Все'>Все</option>
+        {options}
+      </SelectCustom>
+    </SelectBlock>
   )
 }
