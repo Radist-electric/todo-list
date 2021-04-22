@@ -1,14 +1,14 @@
 export const initCurrentSorting = [
   {
+    type: 'name',
+    value: 'Все'
+  },
+  {
     type: 'type',
     value: 'Все'
   },
   {
-    type: 'time',
-    value: 'Все'
-  },
-  {
-    type: 'name',
+    type: 'relevance',
     value: 'Все'
   }
 ]

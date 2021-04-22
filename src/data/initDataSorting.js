@@ -10,7 +10,7 @@ export const initDataSorting = [
     list: ['Рабочие', 'Личные', 'Неотложные']
   },
   {
-    type: 'time',
+    type: 'relevance',
     title: 'Актуальность',
     list: ['Текущие', 'Завершённые']
   }

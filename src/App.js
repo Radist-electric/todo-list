@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
 import { useRoutes } from './routes'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { AppContext } from './context/AppContext'
@@ -22,14 +22,25 @@ export const App = () => {
   const [sorting, setSorting] = useState(initDataSorting)
   const [currentSorting, setCurrentSorting] = useState(initCurrentSorting)
   const [data, setData] = useState(initDataList)
+  const [currentData, setCurrentData] = useState(initDataList)
 
-  const selectHandler = (value, type) => {
-    console.log('selectHandler', value, type)
+  const selectHandler = (type, value) => {
+    const newSorting = [...currentSorting].map((item) => item.type === type ? { type, value } : item)
+    setCurrentSorting(newSorting)
   }
+
+  useEffect(() => {
+    let filteredData = [...data]
+    currentSorting.forEach((item) => {
+      if(item.value === 'Все') return
+      filteredData = [...filteredData].filter((elem) => item.value === elem[item.type])
+    })
+    setCurrentData(filteredData)
+  }, [currentSorting]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
-    <AppContext.Provider value={{selectHandler, sorting, currentSorting, data}}>
+    <AppContext.Provider value={{ selectHandler, sorting, currentSorting, data: currentData }}>
       <Router>
         <AppBlock>
           <Header />
