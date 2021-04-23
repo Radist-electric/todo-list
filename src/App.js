@@ -28,19 +28,57 @@ export const App = () => {
   }
 
   const actionsHandler = (id, action) => {
-    console.log('actionsHandler', id, action)
+    switch(action) {
+      case 'complete':
+        completePost(id)
+      break
+      case 'view':
+        viewPost(id)
+      break
+      case 'edit':
+        editPost(id)
+      break
+      case 'delete':
+        deletePost(id)
+      break
+      default:
+        console.log('Нет такого действия')
+    }
   }
 
-  useEffect(() => {
+  const completePost = (id) => {
+    console.log('completePost',id)
+  }
+
+  const viewPost = (id) => {
+    console.log('viewPost',id)
+  }
+
+  const editPost = (id) => {
+    console.log('editPost',id)
+  }
+
+  const deletePost = (id) => {
+    console.log('deletePost',id)
+    const newData = [...data]
+    newData.splice(data.findIndex((item) => item.id === id), 1)
+    setData(newData)
+  }
+
+  const filterData = () => {
     let filteredData = [...data]
     currentSorting.forEach((item) => {
       if(item.value === 'Все') return
       filteredData = [...filteredData].filter((elem) => item.value === elem[item.type])
     })
     setCurrentData(filteredData)
-  }, [currentSorting]) // eslint-disable-line react-hooks/exhaustive-deps
+  }
 
+  useEffect(() => {
+    filterData()
+  }, [currentSorting, data]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  
   return (
     <AppContext.Provider value={{ selectHandler, actionsHandler, sorting, currentSorting, data: currentData }}>
       <Router>
