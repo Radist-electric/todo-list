@@ -1,5 +1,9 @@
 import { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
+import { IconDelete } from '../icons/delete'
+import { IconEdit } from '../icons/edit'
+import { IconView } from '../icons/view'
+import { IconComplete } from '../icons/complete'
 import styled from 'styled-components'
 
 const Table = styled.table`
@@ -26,7 +30,7 @@ const TD = styled.td`
   }
   :nth-child(2) {
     position: relative;
-    width: 50%;
+    width: 48%;
     div {
       position: absolute;
       top: 50%;
@@ -45,18 +49,33 @@ const TD = styled.td`
     width: 15%;
   }
   :nth-child(5) {
-    width: 10%;
+    width: 12%;
+    svg {
+      height: 100%;
+      width: 100%;
+    }
   }
+`
+const Icon = styled.span`
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  margin: 0 4px;
+  cursor: pointer;
 `
 
 const options = {
   year: 'numeric', month: 'numeric', day: 'numeric',
-  hour: 'numeric', minute: 'numeric', second: 'numeric',
+  hour: 'numeric', minute: 'numeric',
   hour12: false
 }
 
 export const TodoList = () => {
   const context = useContext(AppContext)
+
+  const onClickIcon = (id, action) => {
+    context.actionsHandler(id, action)
+  }
 
   // Создаём JSX
   const rows = context.data.map((row, i) => {
@@ -66,7 +85,12 @@ export const TodoList = () => {
         <TD><div>{row.description}</div></TD>
         <TD>{row.type}</TD>
         <TD>{row.date.toLocaleString('ru-RU', options)}</TD>
-        <TD>Действия</TD>
+        <TD>
+          <Icon onClick={() => { onClickIcon(row.id, 'complete') }}><IconComplete /></Icon>
+          <Icon onClick={() => { onClickIcon(row.id, 'view') }}><IconView /></Icon>
+          <Icon onClick={() => { onClickIcon(row.id, 'edit') }}><IconEdit /></Icon>
+          <Icon onClick={() => { onClickIcon(row.id, 'delete') }}><IconDelete /></Icon>
+        </TD>
       </TR>
     )
   })

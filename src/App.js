@@ -15,8 +15,6 @@ const AppBlock = styled.div`
   width: 100%;
   margin: 0 auto;
 `
-
-
 export const App = () => {
   const routes = useRoutes()
   const [sorting, setSorting] = useState(initDataSorting)
@@ -27,6 +25,10 @@ export const App = () => {
   const selectHandler = (type, value) => {
     const newSorting = [...currentSorting].map((item) => item.type === type ? { type, value } : item)
     setCurrentSorting(newSorting)
+  }
+
+  const actionsHandler = (id, action) => {
+    console.log('actionsHandler', id, action)
   }
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export const App = () => {
 
 
   return (
-    <AppContext.Provider value={{ selectHandler, sorting, currentSorting, data: currentData }}>
+    <AppContext.Provider value={{ selectHandler, actionsHandler, sorting, currentSorting, data: currentData }}>
       <Router>
         <AppBlock>
           <Header />
