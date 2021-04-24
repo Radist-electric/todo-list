@@ -99,6 +99,14 @@ export const initDataList = [
   },
   {
     id: nextId(),
+    name: 'Досуг',
+    description: 'Посмотреть кино с семьёй.',
+    type: 'Личные',
+    date: new Date(2021, 3, 21, 21, 0, 0),
+    relevance: 'Текущие'
+  },
+  {
+    id: nextId(),
     name: 'Встреча',
     description: 'Встретиться с Коляном и выпить по пиву.',
     type: 'Личные',

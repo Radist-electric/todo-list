@@ -47,7 +47,9 @@ export const App = () => {
   }
 
   const completePost = (id) => {
-    console.log('completePost',id)
+    const newData = [...data]
+    newData[data.findIndex((item) => item.id === id)].relevance = 'Завершённые'
+    setData(newData)
   }
 
   const viewPost = (id) => {
@@ -59,7 +61,6 @@ export const App = () => {
   }
 
   const deletePost = (id) => {
-    console.log('deletePost',id)
     const newData = [...data]
     newData.splice(data.findIndex((item) => item.id === id), 1)
     setData(newData)

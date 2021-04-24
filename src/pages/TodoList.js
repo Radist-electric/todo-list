@@ -22,6 +22,7 @@ const Tbody = styled.thead`
 const TR = styled.tr`
   height: 55px;
   border-bottom: 1px solid #DBDDE0;
+  color: ${props => (props.completed ? '#E8E8E8' : '')};
 `
 const TD = styled.td`
   padding-left: 24px;
@@ -61,7 +62,7 @@ const Icon = styled.span`
   height: 16px;
   width: 16px;
   margin: 0 4px;
-  cursor: pointer;
+  cursor: ${props => ( props.completed ? 'default' : 'pointer')};
 `
 
 const options = {
@@ -79,14 +80,20 @@ export const TodoList = () => {
 
   // Создаём JSX
   const rows = context.data.map((row, i) => {
+    const checkCompleted = row.relevance === 'Завершённые'
     return (
-      <TR key={i}>
+      <TR completed={checkCompleted ? 1 : 0} key={i}>
         <TD>{row.name}</TD>
         <TD><div>{row.description}</div></TD>
         <TD>{row.type}</TD>
         <TD>{row.date.toLocaleString('ru-RU', options)}</TD>
         <TD>
-          <Icon onClick={() => { onClickIcon(row.id, 'complete') }}><IconComplete /></Icon>
+          <Icon
+            onClick={() => { !checkCompleted && onClickIcon(row.id, 'complete') }}
+            completed={checkCompleted ? 1 : 0}
+          >
+            <IconComplete color={checkCompleted ? '#E8E8E8' : '#16D090'} />
+          </Icon>
           <Icon onClick={() => { onClickIcon(row.id, 'view') }}><IconView /></Icon>
           <Icon onClick={() => { onClickIcon(row.id, 'edit') }}><IconEdit /></Icon>
           <Icon onClick={() => { onClickIcon(row.id, 'delete') }}><IconDelete /></Icon>
