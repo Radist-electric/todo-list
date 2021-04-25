@@ -62,7 +62,7 @@ const Icon = styled.span`
   height: 16px;
   width: 16px;
   margin: 0 4px;
-  cursor: ${props => ( props.completed ? 'default' : 'pointer')};
+  cursor: ${props => (props.completed ? 'default' : 'pointer')};
 `
 
 const options = {
@@ -94,8 +94,14 @@ export const TodoList = () => {
           >
             <IconComplete color={checkCompleted ? '#E8E8E8' : '#16D090'} />
           </Icon>
-          <Icon onClick={() => { onClickIcon(row.id, 'view') }}><IconView /></Icon>
-          <Icon onClick={() => { onClickIcon(row.id, 'edit') }}><IconEdit /></Icon>
+          <Icon
+            onClick={() => { !checkCompleted && onClickIcon(row.id, 'view') }}
+            completed={checkCompleted ? 1 : 0}
+          ><IconView /></Icon>
+          <Icon
+            onClick={() => { !checkCompleted && onClickIcon(row.id, 'edit') }}
+            completed={checkCompleted ? 1 : 0}
+          ><IconEdit /></Icon>
           <Icon onClick={() => { onClickIcon(row.id, 'delete') }}><IconDelete /></Icon>
         </TD>
       </TR>

@@ -24,6 +24,10 @@
   font-display: swap;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #F6F8FB;
   font-family: 'Lato', sans-serif;

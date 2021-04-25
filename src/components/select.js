@@ -20,12 +20,12 @@ const SelectCustom = styled.select`
 
 export const Select = (props) => {
   const context = useContext(AppContext)
-  const typeValue = context.currentSorting.find((item) => props.data.type === item.type)
-  const [value, setValue] = useState(typeValue.value)
+  const typeValue = !!props.init ? props.init : context.currentSorting.find((item) => props.data.type === item.type).value
+  const [value, setValue] = useState(typeValue)
 
   const handleChange = event => {
     setValue(event.target.value)
-    context.selectHandler(props.data.type, event.target.value)
+    context.selectHandler(props.data.type, event.target.value, props.header)
   }
 
   // Создаём JSX
@@ -35,7 +35,7 @@ export const Select = (props) => {
     <SelectBlock>
       <SelectTitle>{props.data.title}</SelectTitle>
       <SelectCustom value={value} onChange={handleChange}>
-        <option value='Все'>Все</option>
+        {props.header && <option value='Все'>Все</option>}
         {options}
       </SelectCustom>
     </SelectBlock>

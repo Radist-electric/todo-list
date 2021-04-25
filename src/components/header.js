@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
+import { NavLink, useLocation } from 'react-router-dom'
 import { Select } from './select'
 import styled from 'styled-components'
 
@@ -64,7 +64,7 @@ export const Header = () => {
   const title = links.find((item) => curPath === item.link)
 
   const selects = context.sorting.map((item, i) => {
-    return item.list.length ? <Select data={item} key={i} /> : null
+    return item.list.length ? <Select data={item} header={true} key={i}/> : null
   })
 
   return (
