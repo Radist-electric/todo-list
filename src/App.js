@@ -7,6 +7,7 @@ import { initDataSorting } from './data/initDataSorting'
 import { initDataList } from './data/initDataList'
 import { initCurrentSorting } from './data/initCurrentSorting'
 import { View } from './components/view'
+import { Edit } from './components/edit'
 import styled from 'styled-components'
 
 const AppBlock = styled.div`
@@ -26,14 +27,27 @@ export const App = () => {
     show: false,
     post: null
   })
+  const [edit, setEdit] = useState({
+    show: false,
+    post: null
+  })
 
-  const selectHandler = (type, value, header) => {
-    if (header) {
-      const newSorting = [...currentSorting].map((item) => item.type === type ? { type, value } : item)
-      setCurrentSorting(newSorting)
-    } else {
-      setView(view, view[type] = value)
+  const selectHandler = (type, value, element) => {
+    switch (element) {
+      case 'header':
+        const newSorting = [...currentSorting].map((item) => item.type === type ? { type, value } : item)
+        setCurrentSorting(newSorting)
+        break
+      case 'view':
+        setView({ ...view, post: { ...view.post, [type]: value } })
+        break
+      case 'edit':
+        setEdit({ ...edit, post: { ...edit.post, [type]: value } })
+        break
+      default:
+        console.log('Нет такого действия')
     }
+
   }
 
   const viewHandler = (action) => {
@@ -41,10 +55,34 @@ export const App = () => {
     // action === true - Применить новое значение и выйти
     if (action) {
       const newData = [...data]
-      newData[data.findIndex((item) => item.id === view.post.id)].type = view.type
+      newData[data.findIndex((item) => item.id === view.post.id)].type = view.post.type
       setData(newData)
     }
     setView({
+      show: false,
+      post: null
+    })
+  }
+
+  const editHandler = (action, name, description) => {
+    // action === false - Просто выйти
+    // action === true - Применить новое значение и выйти
+    if (action) {
+      const index = data.findIndex((item) => item.id === edit.post.id)
+      const isOldName = sorting.find((item) => item.type === 'name').list.includes(name.trim())
+      const newName = isOldName ? edit.post.name : name
+      const newPost = { ...data[index], ...edit.post, name: newName, description }
+      const newData = [...data.slice(0, index), newPost, ...data.slice(index + 1)]
+      setData(newData)
+      if (!isOldName) {
+        const index = sorting.findIndex((item => item.type === 'name'))
+        const newNameSorting = [...sorting][index]
+        newNameSorting.list.push(newName)
+        const newSorting = [...sorting.slice(0, index), newNameSorting, ...sorting.slice(index + 1)]
+        setSorting(newSorting)
+      }
+    }
+    setEdit({
       show: false,
       post: null
     })
@@ -86,7 +124,10 @@ export const App = () => {
 
   // Редактирование записи
   const editPost = (id) => {
-    console.log('editPost', id)
+    setEdit({
+      show: true,
+      post: currentData.find((item) => item.id === id)
+    })
   }
 
   // Удаление записи
@@ -106,26 +147,20 @@ export const App = () => {
     setCurrentData(filteredData)
   }
 
-  // Запрос фильтра записей при изменении сортировки и самих данных записей
+  // Фильтрация записей при изменении сортировки и самих данных записей
   useEffect(() => {
     filterData()
   }, [currentSorting, data]) // eslint-disable-line react-hooks/exhaustive-deps
 
-
-  // Вызываем окно просмотра записи при запросе
-  // useEffect(() => {
-
-  // }, [view])
-
-
   return (
-    <AppContext.Provider value={{ selectHandler, actionsHandler, viewHandler, sorting, currentSorting, data: currentData }}>
+    <AppContext.Provider value={{ selectHandler, actionsHandler, viewHandler, editHandler, sorting, currentSorting, data: currentData }}>
       <Router>
         <AppBlock>
           <Header />
           {routes}
         </AppBlock>
         {view.show && <View post={view.post} />}
+        {edit.show && <Edit post={edit.post} />}
       </Router>
     </AppContext.Provider>
   )

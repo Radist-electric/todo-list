@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Select } from './select'
+import { Button } from './button'
 import styled from 'styled-components'
 
 const links = [
@@ -64,7 +65,7 @@ export const Header = () => {
   const title = links.find((item) => curPath === item.link)
 
   const selects = context.sorting.map((item, i) => {
-    return item.list.length ? <Select data={item} header={true} key={i}/> : null
+    return item.list.length ? <Select data={item} element='header' key={i} /> : null
   })
 
   return (
@@ -74,6 +75,7 @@ export const Header = () => {
         <Nav>{linksList}</Nav>
       </LinksBlock>
       {curPath === '/' && <>{selects}</>}
+      {curPath === '/' && <Button>Добавить задачу</Button>}
     </HeaderBlock>
   )
 }

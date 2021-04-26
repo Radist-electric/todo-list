@@ -3,7 +3,8 @@ import { AppContext } from '../context/AppContext'
 import styled from 'styled-components'
 
 const SelectBlock = styled.div`
-  margin: 0 10px;
+  margin-top: 10px;
+  margin-right: 10px;
 `
 const SelectTitle = styled.p`
   margin: 0 0 5px;
@@ -25,7 +26,7 @@ export const Select = (props) => {
 
   const handleChange = event => {
     setValue(event.target.value)
-    context.selectHandler(props.data.type, event.target.value, props.header)
+    context.selectHandler(props.data.type, event.target.value, props.element)
   }
 
   // Создаём JSX
@@ -35,7 +36,7 @@ export const Select = (props) => {
     <SelectBlock>
       <SelectTitle>{props.data.title}</SelectTitle>
       <SelectCustom value={value} onChange={handleChange}>
-        {props.header && <option value='Все'>Все</option>}
+        {props.element === 'header' && <option value='Все'>Все</option>}
         {options}
       </SelectCustom>
     </SelectBlock>
