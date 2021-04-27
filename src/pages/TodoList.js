@@ -86,7 +86,7 @@ export const TodoList = () => {
         <TD>{row.name}</TD>
         <TD><div>{row.description}</div></TD>
         <TD>{row.type}</TD>
-        <TD>{row.date.toLocaleString('ru-RU', options)}</TD>
+        <TD>{new Date(Date.parse(row.date)).toLocaleString('ru-RU', options)}</TD>
         <TD>
           <Icon
             onClick={() => { !checkCompleted && onClickIcon(row.id, 'complete') }}

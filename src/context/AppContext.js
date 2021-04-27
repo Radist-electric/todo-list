@@ -7,6 +7,8 @@ export const AppContext = createContext({
   actionsHandler: noop,
   viewHandler: noop,
   editHandler: noop,
+  addPost: noop,
+  addHandler: noop,
   sorting: [],
   currentSorting: [],
   data: []

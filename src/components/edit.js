@@ -32,6 +32,7 @@ export const Edit = (props) => {
   const context = useContext(AppContext)
   const [name, setName] = useState(props.post.name)
   const [description, setDescription] = useState(props.post.description)
+  const [date, setDate] = useState(props.post.date)
 
   const getName = (name) => {
     setName(name)
@@ -41,18 +42,29 @@ export const Edit = (props) => {
     setDescription(description)
   }
 
+  const getDate = (date) => {
+    setDate(date)
+  }
+
 
   return (
     <Background>
       <ViewBlock>
         <Select
           data={context.sorting.find((item) => item.type === 'name')}
-          element='edit'
+          element={props.action ? 'edit' : 'add'}
           init={props.post.name} />
         <InputTitle>Задайте новое название</InputTitle>
         <Input
+          type='text'
           value={props.post.name}
-          getName={getName}
+          getInput={getName}
+        />
+        <InputTitle>Задайте время</InputTitle>
+        <Input
+          type='datetime-local'
+          value={props.post.date}
+          getInput={getDate}
         />
         <InputTitle>Описание</InputTitle>
         <Textarea
@@ -61,15 +73,19 @@ export const Edit = (props) => {
         />
         <Select
           data={context.sorting.find((item) => item.type === 'type')}
-          element='edit'
+          element={props.action ? 'edit' : 'add'}
           init={props.post.type} />
         <Select
           data={context.sorting.find((item) => item.type === 'relevance')}
-          element='edit'
+          element={props.action ? 'edit' : 'add'}
           init={props.post.relevance} />
         <ButtonsBlock>
-          <Button onClick={() => { context.editHandler(false) }}>Выйти</Button>
-          <Button onClick={() => { context.editHandler(true, name, description) }}>Сохранить</Button>
+          <Button
+            onClick={() => { props.action ? context.editHandler(false) : context.addHandler(false)}}
+          >Выйти</Button>
+          <Button
+            onClick={() => { props.action ? context.editHandler(true, name, description, date) : context.addHandler(true, name, description, date)}}
+          >Сохранить</Button>
         </ButtonsBlock>
       </ViewBlock>
     </Background>

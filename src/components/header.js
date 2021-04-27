@@ -75,7 +75,7 @@ export const Header = () => {
         <Nav>{linksList}</Nav>
       </LinksBlock>
       {curPath === '/' && <>{selects}</>}
-      {curPath === '/' && <Button>Добавить задачу</Button>}
+      {curPath === '/' && <Button onClick={context.addPost}>Добавить задачу</Button>}
     </HeaderBlock>
   )
 }

@@ -18,7 +18,7 @@ export const Input = (props) => {
 
   const onChangeHandler = event => {
     setValue(event.target.value)
-    props.getName(event.target.value)
+    props.getInput(event.target.value)
   }
 
   return (
