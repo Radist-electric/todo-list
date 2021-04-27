@@ -9,7 +9,9 @@ export const AppContext = createContext({
   editHandler: noop,
   addPost: noop,
   addHandler: noop,
+  paginationHandler: noop,
   sorting: [],
   currentSorting: [],
-  data: []
+  data: [],
+  pagination: {}
 })

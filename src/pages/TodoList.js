@@ -4,6 +4,7 @@ import { IconDelete } from '../icons/delete'
 import { IconEdit } from '../icons/edit'
 import { IconView } from '../icons/view'
 import { IconComplete } from '../icons/complete'
+import { Pagination } from '../components/pagination'
 import styled from 'styled-components'
 
 const Table = styled.table`
@@ -14,7 +15,6 @@ const Table = styled.table`
 const Thead = styled.thead`
   background-color: #E8E8E8;
   font-weight: 700;
-  
 `
 const Tbody = styled.thead`
   background-color: #FFFFFF;
@@ -79,7 +79,10 @@ export const TodoList = () => {
   }
 
   // Создаём JSX
+  const curPage = context.pagination.currentPage
+  const limit = context.pagination.limit
   const rows = context.data.map((row, i) => {
+    if ((i + 1) <= (curPage - 1) * limit || (i + 1) > curPage * limit) return
     const checkCompleted = row.relevance === 'Завершённые'
     return (
       <TR completed={checkCompleted ? 1 : 0} key={i}>
@@ -109,19 +112,22 @@ export const TodoList = () => {
   })
 
   return (
-    <Table>
-      <Thead>
-        <TR>
-          <TD>Название</TD>
-          <TD>Описание</TD>
-          <TD>Тип</TD>
-          <TD>Дата</TD>
-          <TD>Действия</TD>
-        </TR>
-      </Thead>
-      <Tbody>
-        {rows}
-      </Tbody>
-    </Table>
+    <>
+      <Table>
+        <Thead>
+          <TR>
+            <TD>Название</TD>
+            <TD>Описание</TD>
+            <TD>Тип</TD>
+            <TD>Дата</TD>
+            <TD>Действия</TD>
+          </TR>
+        </Thead>
+        <Tbody>
+          {rows}
+        </Tbody>
+      </Table>
+      <Pagination/>
+    </>
   )
 }

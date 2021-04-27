@@ -6,6 +6,7 @@ import { Header } from './components/header'
 import { initDataSorting } from './data/initDataSorting'
 import { initDataList } from './data/initDataList'
 import { initCurrentSorting } from './data/initCurrentSorting'
+import { initPagination } from './data/initPagination'
 import { View } from './components/view'
 import { Edit } from './components/edit'
 import nextId from 'react-id-generator'
@@ -22,6 +23,7 @@ export const App = () => {
   const routes = useRoutes()
   const [sorting, setSorting] = useState(initDataSorting)
   const [currentSorting, setCurrentSorting] = useState(initCurrentSorting)
+  const [pagination, setPagination] = useState(initPagination)
   const [data, setData] = useState(initDataList)
   const [currentData, setCurrentData] = useState(initDataList)
   const [view, setView] = useState({
@@ -200,6 +202,20 @@ export const App = () => {
       filteredData = [...filteredData].filter((elem) => item.value === elem[item.type])
     })
     setCurrentData(filteredData)
+    setPagination({
+      currentPage: 1,
+      limit: 10
+    })
+  }
+
+  // Обработка пагинации
+  const paginationHandler = page => {
+    if (page !== 0 && page <= Math.ceil(currentData.length / pagination.limit) && page !== pagination.currentPage) {
+      setPagination({
+        currentPage: page,
+        limit: 10
+      })
+    }
   }
 
   // Фильтрация записей при изменении сортировки и самих данных записей
@@ -208,7 +224,7 @@ export const App = () => {
   }, [currentSorting, data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <AppContext.Provider value={{ selectHandler, actionsHandler, viewHandler, editHandler, addPost, addHandler, sorting, currentSorting, data: currentData }}>
+    <AppContext.Provider value={{ selectHandler, actionsHandler, viewHandler, editHandler, addPost, addHandler, paginationHandler, sorting, currentSorting, data: currentData, pagination }}>
       <Router>
         <AppBlock>
           <Header />
