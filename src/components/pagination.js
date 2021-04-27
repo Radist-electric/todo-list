@@ -22,7 +22,7 @@ const PagButton = styled.input`
   cursor: pointer;
 `
 
-export const Pagination = (props) => {
+export const Pagination = () => {
   const context = useContext(AppContext)
 
   // Обработка постраничной навигации

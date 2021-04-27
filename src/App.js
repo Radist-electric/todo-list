@@ -19,13 +19,70 @@ const AppBlock = styled.div`
   width: 100%;
   margin: 0 auto;
 `
+const isLocalStorage = storageAvailable('localStorage')
+
+function storageAvailable(x) {
+  try {
+    localStorage.setItem(x, x)
+    localStorage.removeItem(x)
+    return true
+  }
+  catch (e) {
+    return false
+  }
+}
+
+const storageDataSortingName = 'todoDataSorting',
+  storageCurrentSortingName = 'todoCurrentSorting',
+  storageDataName = 'todoData',
+  storagePaginationName = 'todoPagination'
+let todoDataSorting,
+  todoCurrentSorting,
+  todoData,
+  todoPagination
+
+  if (isLocalStorage) {
+    todoDataSorting = JSON.parse(localStorage.getItem(storageDataSortingName))
+    todoCurrentSorting = JSON.parse(localStorage.getItem(storageCurrentSortingName))
+    todoData = JSON.parse(localStorage.getItem(storageDataName))
+    todoPagination = JSON.parse(localStorage.getItem(storagePaginationName))
+    // Если в LocalStorage нет данных, то подгружаем стартовый набор
+    if (!todoDataSorting) {
+      localStorage.setItem(storageDataSortingName, JSON.stringify(initDataSorting))
+      todoDataSorting = JSON.parse(JSON.stringify(initDataSorting))
+    }
+    if (!todoCurrentSorting) {
+      localStorage.setItem(storageCurrentSortingName, JSON.stringify(initCurrentSorting))
+      todoCurrentSorting = JSON.parse(JSON.stringify(initCurrentSorting))
+    }
+    if (!todoData) {
+      localStorage.setItem(storageDataName, JSON.stringify(initDataList))
+      todoData = JSON.parse(JSON.stringify(initDataList))
+    }
+    if (!todoPagination) {
+      localStorage.setItem(storagePaginationName, JSON.stringify(initPagination))
+      todoPagination = JSON.parse(JSON.stringify(initPagination))
+    }
+
+  } else {
+    todoDataSorting = JSON.parse(JSON.stringify(initDataSorting))
+    todoCurrentSorting = JSON.parse(JSON.stringify(initCurrentSorting))
+    todoData = JSON.parse(JSON.stringify(initDataList))
+    todoPagination = JSON.parse(JSON.stringify(initPagination))
+  }
+
+
+
+
+
+
 export const App = () => {
   const routes = useRoutes()
-  const [sorting, setSorting] = useState(initDataSorting)
-  const [currentSorting, setCurrentSorting] = useState(initCurrentSorting)
-  const [pagination, setPagination] = useState(initPagination)
-  const [data, setData] = useState(initDataList)
-  const [currentData, setCurrentData] = useState(initDataList)
+  const [sorting, setSorting] = useState(todoDataSorting)
+  const [currentSorting, setCurrentSorting] = useState(todoCurrentSorting)
+  const [data, setData] = useState(todoData)
+  const [pagination, setPagination] = useState(todoPagination)
+  const [currentData, setCurrentData] = useState(todoData)
   const [view, setView] = useState({
     show: false,
     post: null
@@ -39,6 +96,31 @@ export const App = () => {
     post: null
   })
 
+
+  // При обновлении данных сортировки сохраняем их в LocalStorage
+  useEffect(() => {
+    localStorage.setItem(storageDataSortingName, JSON.stringify(sorting))
+  }, [sorting])
+
+  // При обновлении данных текущей сортировки сохраняем их в LocalStorage
+  useEffect(() => {
+    localStorage.setItem(storageCurrentSortingName, JSON.stringify(currentSorting))
+  }, [currentSorting])
+
+  // При обновлении данных списка дел сохраняем их в LocalStorage
+  useEffect(() => {
+    localStorage.setItem(storageDataName, JSON.stringify(data))
+  }, [data])
+
+  // При обновлении данных постраничной пагинации сохраняем их в LocalStorage
+  useEffect(() => {
+    localStorage.setItem(storagePaginationName, JSON.stringify(pagination))
+  }, [pagination])
+
+
+
+
+// Обработка данных, полученных из элементов Select
   const selectHandler = (type, value, element) => {
     switch (element) {
       case 'header':
@@ -120,6 +202,7 @@ export const App = () => {
     newNameSorting.list.push(newName)
     const newSorting = [...sorting.slice(0, index), newNameSorting, ...sorting.slice(index + 1)]
     setSorting(newSorting)
+
   }
 
   // Обработка кнопок действий списка записей
